@@ -1,0 +1,101 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #121212; /* Colore di sfondo scuro */
+    color: #ffffff; /* Testo bianco */
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333; /* Colore di sfondo leggermente più chiaro per il header */
+    color: white;
+    padding: 1em 0;
+    text-align: center;
+}
+
+h1 {
+    margin: 0;
+}
+
+main {
+    padding: 2em;
+}
+
+.movie-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.movie-card {
+    background-color: #424141; /* Colore di sfondo leggermente più chiaro per le card */
+    border: 1px solid #555; /* Bordo leggermente più scuro */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 1em;
+
+    width: 180px; /* Dimensioni originali */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.movie-card img {
+    width: 180px; /* Dimensioni originali */
+    height: 249px; /* Dimensioni originali */
+    object-fit: cover;
+    border-bottom: 1px solid #555; /* Bordo leggermente più scuro */
+}
+
+.movie-info {
+    padding: 1em;
+  
+    border-radius: 0 0 10px 10px;
+    text-align: center;
+}
+
+.movie-info h2 {
+    margin: 0;
+    font-size: 1.5em; /* Adjust font size for larger cards */
+    color: #ffffff; /* Testo bianco */
+    margin-bottom: 0.5em;
+}
+
+.movie-info p {
+    margin: 0.5em 0;
+    color: #cccccc; /* Testo grigio */
+}
+
+.movie-info p strong {
+    color: #ffffff; /* Testo bianco */
+}
+
+.movie-info .rating {
+    color: #FFD700; /* Colore dell'icona di rating */
+    font-weight: bold;
+}
+
+.movie-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.movie-detail img {
+    width: 140px; /* Dimensioni originali */
+    height: 209px; /* Dimensioni originali */
+    object-fit: cover;
+    border-bottom: 1px solid #555; /* Bordo leggermente più scuro */
+}
+
+.movie-detail .movie-info {
+    padding: 1em;
+    background-color: #292929; /* Colore di sfondo più scuro per le info */
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 1em;
+    width: 80%;
+    max-width: 600px;
+}

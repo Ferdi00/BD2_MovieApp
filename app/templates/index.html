@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Film Collection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Genny Tortora - Film Collection -</h1>
+        <form id="searchForm">
+            <input type="text" id="searchInput" placeholder="Cerca film...">
+            <button type="submit">Cerca</button>
+        </form>
+    </header>
+    <main>
+        <div class="movie-container">
+            {% for movie in movies %}
+            <div class="movie-card" data-movie-id="{{ movie._id }}">
+                <img src="{{ movie.poster }}" alt="Poster of {{ movie.title }}">
+                <div class="movie-info">
+                    <h2>{{ movie.title }} (<span class="movie-year">{{ movie.year }}</span>)</h2>
+                    <p><strong>Genre:</strong> {{ movie.genre }}</p>
+                    <p><strong>Certificate:</strong> {{ movie.certificate }}</p>
+                    <p><strong>Duration:</strong> {{ movie.duration }} min</p>
+                    <p><strong>Rating:</strong> <span class="rating">{{ movie.rating }}</span></p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ movie.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</head>
+<body>
+    <header>
+        <h1>{{ movie.title }}</h1>
+    </header>
+    <main>
+        <div class="movie-detail">
+            <img src="{{ movie.poster }}" alt="Poster of {{ movie.title }}">
+            <div class="movie-info">
+                <h2>{{ movie.title }} (<span class="movie-year">{{ movie.year }}</span>)</h2>
+                <p><strong>Genre:</strong> {{ movie.genre }}</p>
+                <p><strong>Certificate:</strong> {{ movie.certificate }}</p>
+                <p><strong>Duration:</strong> {{ movie.duration }} min</p>
+                <p><strong>Director:</strong> {{ movie.director }}</p>
+                <p><strong>Cast:</strong> {{ movie.cast }}</p>
+                <p><strong>Rating:</strong> <span class="rating">{{ movie.rating }}</span></p>
+                <p><strong>Metascore:</strong> {{ movie.metascore }}</p>
+                <p><strong>Votes:</strong> {{ movie.votes }}</p>
+                <p><strong>Description:</strong> {{ movie.description }}</p>
+                <p><strong>Review:</strong> {{ movie.review_title }}</p>
+                <p>{{ movie.review }}</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
