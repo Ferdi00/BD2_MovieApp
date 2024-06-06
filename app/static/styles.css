@@ -1,101 +1,256 @@
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #121212; /* Colore di sfondo scuro */
-    color: #ffffff; /* Testo bianco */
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
 }
 
 header {
-    background-color: #333; /* Colore di sfondo leggermente più chiaro per il header */
-    color: white;
-    padding: 1em 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #1c1c1c;
+    border-bottom: 2px solid #444;
+    position: relative;
+}
+
+header .home-icon {
+    font-size: 2em;
+    color: #fff;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+header .home-icon:hover {
+    color: #ff6f61;
+}
+
+header h1 {
+    flex: 1;
+    margin: 0;
+    font-size: 2em;
+    color: #fff;
     text-align: center;
 }
 
-h1 {
-    margin: 0;
+#searchForm {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    justify-content: center;
+    margin: 0 20px;
 }
 
-main {
-    padding: 2em;
+#searchInput {
+    padding: 10px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    width: 70%;
+    max-width: 600px;
+    background-color: #333;
+    color: #fff;
+}
+
+#searchForm button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff6f61;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#searchForm button:hover {
+    background-color: #ff5a4d;
+}
+
+header .login-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff6f61;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+header .login-button:hover {
+    background-color: #ff5a4d;
+}
+
+.filter-panel {
+    margin: 20px;
+}
+
+.filter-toggle {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff6f61;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.filter-toggle:hover {
+    background-color: #ff5a4d;
+}
+
+#filters {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background-color: #1c1c1c;
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.filters label,
+.filters select,
+.filters button {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+}
+
+.filter-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff6f61;
+    color: #fff;
+    cursor: pointer;
+}
+
+.filter-button:hover {
+    background-color: #ff5a4d;
+}
+
+.filter-select {
+    padding: 8px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    margin-bottom: 10px;
+    width: 200px;
+}
+
+.filter-label {
+    color: #fff;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.filters button:hover {
+    background-color: #ff5a4d;
 }
 
 .movie-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: center;
+    padding: 20px;
 }
 
 .movie-card {
-    background-color: #424141; /* Colore di sfondo leggermente più chiaro per le card */
-    border: 1px solid #555; /* Bordo leggermente più scuro */
+    background-color: #1c1c1c;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 1em;
-
-    width: 180px; /* Dimensioni originali */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    width: 160px;
     cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
 }
 
 .movie-card img {
-    width: 180px; /* Dimensioni originali */
-    height: 249px; /* Dimensioni originali */
+    width: 160px;
+    height: 229px;
     object-fit: cover;
-    border-bottom: 1px solid #555; /* Bordo leggermente più scuro */
 }
 
 .movie-info {
-    padding: 1em;
-  
-    border-radius: 0 0 10px 10px;
+    padding: 10px;
     text-align: center;
 }
 
 .movie-info h2 {
-    margin: 0;
-    font-size: 1.5em; /* Adjust font size for larger cards */
-    color: #ffffff; /* Testo bianco */
-    margin-bottom: 0.5em;
+    font-size: 1.1em;
+    margin: 0.5em 0;
 }
 
 .movie-info p {
-    margin: 0.5em 0;
-    color: #cccccc; /* Testo grigio */
+    margin: 0.3em 0;
 }
 
-.movie-info p strong {
-    color: #ffffff; /* Testo bianco */
+.rating[data-rating] {
+    color: #fff; /* default color */
 }
 
-.movie-info .rating {
-    color: #FFD700; /* Colore dell'icona di rating */
-    font-weight: bold;
+.rating[data-rating="NaN"] {
+    color: #fff;
 }
 
-.movie-detail {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.rating[data-rating^="0"],
+.rating[data-rating^="1"],
+.rating[data-rating^="2"],
+.rating[data-rating^="3"],
+.rating[data-rating^="4"],
+.rating[data-rating^="5"] {
+    color: red;
 }
 
-.movie-detail img {
-    width: 140px; /* Dimensioni originali */
-    height: 209px; /* Dimensioni originali */
-    object-fit: cover;
-    border-bottom: 1px solid #555; /* Bordo leggermente più scuro */
+.rating[data-rating^="6"],
+.rating[data-rating^="7.0"],
+.rating[data-rating^="7.1"],
+.rating[data-rating^="7.2"],
+.rating[data-rating^="7.3"],
+.rating[data-rating^="7.4"] {
+    color: yellow;
 }
 
-.movie-detail .movie-info {
-    padding: 1em;
-    background-color: #292929; /* Colore di sfondo più scuro per le info */
-    border-radius: 10px;
-    text-align: center;
-    margin-top: 1em;
-    width: 80%;
-    max-width: 600px;
+.rating[data-rating^="7.5"],
+.rating[data-rating^="7.6"],
+.rating[data-rating^="7.7"],
+.rating[data-rating^="7.8"],
+.rating[data-rating^="7.9"],
+.rating[data-rating^="8"],
+.rating[data-rating^="8."] {
+    color: green;
+}
+
+.rating[data-rating^="9"],
+.rating[data-rating^="9.1"],
+.rating[data-rating^="9.2"],
+.rating[data-rating^="9.3"],
+.rating[data-rating^="9.4"],
+.rating[data-rating^="9.5"],
+.rating[data-rating^="9.6"],
+.rating[data-rating^="9.7"],
+.rating[data-rating^="9.8"],
+.rating[data-rating^="9.9"],
+.rating[data-rating^="10"] {
+    color: purple;
 }
