@@ -14,6 +14,12 @@ header {
     background-color: #1c1c1c;
     border-bottom: 2px solid #444;
     position: relative;
+    height: 60px; /* Altezza uniforme per l'header */
+}
+
+header .left {
+    display: flex;
+    align-items: center;
 }
 
 header .home-icon {
@@ -27,12 +33,21 @@ header .home-icon:hover {
     color: #ff6f61;
 }
 
-header h1 {
-    flex: 1;
-    margin: 0;
-    font-size: 2em;
+header .filter-toggle {
+    width: auto;
+    height: 100%;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff6f61;
     color: #fff;
-    text-align: center;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 10px 20px;
+}
+
+header .filter-toggle:hover {
+    background-color: #ff5a4d;
 }
 
 #searchForm {
@@ -90,7 +105,9 @@ header .login-button:hover {
 }
 
 .filter-toggle {
-    padding: 10px 20px;
+   margin-top: 10px;
+    width: 80px;
+    height: 40px;
     font-size: 1em;
     border: none;
     border-radius: 5px;
@@ -104,64 +121,90 @@ header .login-button:hover {
     background-color: #ff5a4d;
 }
 
-#filters {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    background-color: #1c1c1c;
-    padding: 20px;
-    margin-top: 10px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.filter-panel {
+    margin: 20px;
 }
 
-.filters label,
-.filters select,
-.filters button {
-    margin-bottom: 10px;
+#filterForm {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    background-color: #1c1c1c;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+#filterForm div {
+    margin-bottom: 15px;
+}
+
+#filterForm .genre-section {
+    flex: 1 1 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#filterForm .genre-section label {
+    font-size: 1.4em; /* Aumenta la dimensione del font */
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+}
+
+#filterForm .genre-section input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.3); /* Ingrandisce i checkbox */
+}
+
+#filterForm .other-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     width: 100%;
-    padding: 10px;
-    font-size: 1em;
+}
+
+#filterForm .other-filters div {
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#filterForm .other-filters label {
+    font-size: 1.4em; /* Aumenta la dimensione del font */
+}
+
+#filterForm .other-filters input[type="number"] {
+    padding: 5px;
+    font-size: 1.2em; /* Aumenta la dimensione del font */
     border: none;
     border-radius: 5px;
     background-color: #333;
     color: #fff;
+    width: 100px; /* Larghezza più piccola per gli input numerici */
+    text-align: center;
 }
 
-.filter-button {
+#filterForm button[type="submit"] {
     padding: 10px 20px;
-    font-size: 1em;
+    font-size: 1.2em; /* Aumenta la dimensione del font */
     border: none;
     border-radius: 5px;
     background-color: #ff6f61;
     color: #fff;
     cursor: pointer;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
 }
 
-.filter-button:hover {
+#filterForm button[type="submit"]:hover {
     background-color: #ff5a4d;
 }
 
-.filter-select {
-    padding: 8px;
-    font-size: 1em;
-    border: none;
-    border-radius: 5px;
-    background-color: #333;
-    color: #fff;
-    margin-bottom: 10px;
-    width: 200px;
-}
-
-.filter-label {
-    color: #fff;
-    font-size: 1.2em;
-    margin-bottom: 10px;
-}
-
-.filters button:hover {
-    background-color: #ff5a4d;
-}
 
 .movie-container {
     display: flex;
@@ -182,7 +225,7 @@ header .login-button:hover {
 }
 
 .movie-card:hover {
-    transform: scale(1.05);
+    transform: scale(1.09);
 }
 
 .movie-card img {

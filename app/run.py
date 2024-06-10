@@ -15,6 +15,16 @@ db = client["mydatabase"]
 collection = db["movies"]
 
 
+def get_unique_genres():
+    pipeline = [{"$unwind": "$genre"}, {"$group": {"_id": "$genre"}}]
+    results = collection.aggregate(pipeline)
+
+    unique_genres = set()
+    for result in results:
+        genres = [genre.strip() for genre in result["_id"].split(",")]
+        unique_genres.update(genres)
+
+
 # Endpoint per mostrare le collezioni nel database
 @app.route("/showcollections")
 def show_collections():
@@ -60,6 +70,8 @@ def filter_movies():
     rating = request.args.get("rating", "")
     min_duration = request.args.get("min_duration", "")
     max_duration = request.args.get("max_duration", "")
+    min_year = request.args.get("min_year", "")
+    max_year = request.args.get("max_year", "")
     filter_criteria = {}
 
     if genres:
@@ -75,6 +87,13 @@ def filter_movies():
             filter_criteria["duration"]["$lte"] = int(max_duration)
         else:
             filter_criteria["duration"] = {"$lte": int(max_duration)}
+    if min_year:
+        filter_criteria["year"] = {"$gte": int(min_year)}
+    if max_year:
+        if "year" in filter_criteria:
+            filter_criteria["year"]["$lte"] = int(max_year)
+        else:
+            filter_criteria["year"] = {"$lte": int(max_year)}
 
     movies = list(collection.find(filter_criteria))
     for movie in movies:

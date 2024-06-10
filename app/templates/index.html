@@ -11,9 +11,11 @@
 </head>
 <body>
     <header>
-        
+        <div class="left">
         <a href="/" class="home-icon"><i class="fas fa-home"></i></a>
         <button class="filter-toggle">Filters</button>
+        </div>
+        
         <form id="searchForm">
             <input type="text" id="searchInput" placeholder="Cerca film...">
             <button type="submit">Cerca</button>
@@ -25,12 +27,32 @@
 
     <div id="filters" style="display:none;">
     <form id="filterForm">
-        <div>
-            <label for="genre">Genre:</label>
-            <input type="checkbox" name="genre" value="Comedy"> Comedy
-            <input type="checkbox" name="genre" value="Action"> Action
-            <!-- Add more genres as needed -->
-        </div>
+    <div class="genre-section">
+        <label for="genre">Genre:</label>
+        <label><input type="checkbox" name="genre" value="Action"> Action</label>
+        <label><input type="checkbox" name="genre" value="Adventure"> Adventure</label>
+        <label><input type="checkbox" name="genre" value="Animation"> Animation</label>
+        <label><input type="checkbox" name="genre" value="Biography"> Biography</label>
+        <label><input type="checkbox" name="genre" value="Comedy"> Comedy</label>
+        <label><input type="checkbox" name="genre" value="Crime"> Crime</label>
+        <label><input type="checkbox" name="genre" value="Documentary"> Documentary</label>
+        <label><input type="checkbox" name="genre" value="Drama"> Drama</label>
+        <label><input type="checkbox" name="genre" value="Family"> Family</label>
+        <label><input type="checkbox" name="genre" value="Fantasy"> Fantasy</label>
+        <label><input type="checkbox" name="genre" value="Film-Noir"> Film-Noir</label>
+        <label><input type="checkbox" name="genre" value="History"> History</label>
+        <label><input type="checkbox" name="genre" value="Horror"> Horror</label>
+        <label><input type="checkbox" name="genre" value="Music"> Music</label>
+        <label><input type="checkbox" name="genre" value="Musical"> Musical</label>
+        <label><input type="checkbox" name="genre" value="Mystery"> Mystery</label>
+        <label><input type="checkbox" name="genre" value="Romance"> Romance</label>
+        <label><input type="checkbox" name="genre" value="Sci-Fi"> Sci-Fi</label>
+        <label><input type="checkbox" name="genre" value="Sport"> Sport</label>
+        <label><input type="checkbox" name="genre" value="Thriller"> Thriller</label>
+        <label><input type="checkbox" name="genre" value="War"> War</label>
+        <label><input type="checkbox" name="genre" value="Western"> Western</label>
+    </div>
+    <div class="other-filters">
         <div>
             <label for="rating">Minimum Rating:</label>
             <input type="number" id="rating" name="rating" min="0" max="10" step="0.1">
@@ -43,8 +65,18 @@
             <label for="max_duration">Max Duration (minutes):</label>
             <input type="number" id="max_duration" name="max_duration">
         </div>
+        <div>
+            <label for="min_year">Min Year:</label>
+            <input type="number" id="min_year" name="min_year">
+        </div>
+        <div>
+            <label for="max_year">Max Year:</label>
+            <input type="number" id="max_year" name="max_year">
+        </div>
         <button type="submit">Apply Filters</button>
-    </form>
+    </div>
+</form>
+
 </div>
 
 

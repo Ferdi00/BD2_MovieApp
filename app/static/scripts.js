@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
     searchForm.addEventListener("submit", searchMovies);
     filterForm.addEventListener("submit", applyFilters);
     filterToggle.addEventListener("click", toggleFilterPanel);
+
   }
 
   function searchMovies(event) {
@@ -29,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function applyFilters(event) {
     event.preventDefault();
     var params = new URLSearchParams(new FormData(filterForm)).toString();
+    console.log(params)
     fetch(`/api/filter?${params}`)
       .then(handleResponse)
       .then(renderMovies)
@@ -79,12 +81,10 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
     movieContainer.innerHTML = movieHTML;
+    // Applica i colori delle valutazioni dopo il rendering dei film
+    applyRatingColors();
   }
 
-  function parseYear(year) {
-    var yearInt = parseInt(year, 10);
-    return isNaN(yearInt) ? year : yearInt;
-  }
 
   function applyRatingColors() {
     var ratings = document.querySelectorAll(".rating");
@@ -124,5 +124,16 @@ document.addEventListener("DOMContentLoaded", function () {
       var movieId = card.getAttribute("data-movie-id");
       window.location.href = "/movie/" + movieId;
     });
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  var movieYears = document.querySelectorAll(".movie-year");
+  movieYears.forEach(function (yearElem) {
+    var year = yearElem.textContent;
+    var yearInt = parseInt(year, 10);
+    if (!isNaN(yearInt)) {
+      yearElem.textContent = yearInt;
+    }
   });
 });
