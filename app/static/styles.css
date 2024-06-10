@@ -34,7 +34,10 @@ header h1 {
     color: #fff;
     text-align: center;
 }
-
+.intestazione{
+    position: relative;
+    text-align: center;
+}
 #searchForm {
     display: flex;
     align-items: center;
