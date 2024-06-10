@@ -1,100 +1,181 @@
 <!DOCTYPE html>
 <html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Film Collection</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
     <script src="{{ url_for('static', filename='scripts.js') }}" defer></script>
     <!-- Aggiungi Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
     <header>
-        <div class="left">
+      <div class="left">
         <a href="/" class="home-icon"><i class="fas fa-home"></i></a>
         <button class="filter-toggle">Filters</button>
-        </div>
-        
-        <form id="searchForm">
-            <input type="text" id="searchInput" placeholder="Cerca film...">
-            <button type="submit">Cerca</button>
-        </form>
-         <a href="/login" class="login-button">Login/Register</a>
+      </div>
+
+      <form id="searchForm">
+        <input type="text" id="searchInput" placeholder="Cerca film..." />
+        <button type="submit">Cerca</button>
+      </form>
+      {% if user %} Benvenuto {{ user.nome }}
+      <a href="/logout" class="login-button">Logout</a>
+      {% else %}
+      <a href="/login" class="login-button">Login/Register</a>
+      {% endif %}
     </header>
     <main>
-
-
-    <div id="filters" style="display:none;">
-    <form id="filterForm">
-    <div class="genre-section">
-        <label for="genre">Genre:</label>
-        <label><input type="checkbox" name="genre" value="Action"> Action</label>
-        <label><input type="checkbox" name="genre" value="Adventure"> Adventure</label>
-        <label><input type="checkbox" name="genre" value="Animation"> Animation</label>
-        <label><input type="checkbox" name="genre" value="Biography"> Biography</label>
-        <label><input type="checkbox" name="genre" value="Comedy"> Comedy</label>
-        <label><input type="checkbox" name="genre" value="Crime"> Crime</label>
-        <label><input type="checkbox" name="genre" value="Documentary"> Documentary</label>
-        <label><input type="checkbox" name="genre" value="Drama"> Drama</label>
-        <label><input type="checkbox" name="genre" value="Family"> Family</label>
-        <label><input type="checkbox" name="genre" value="Fantasy"> Fantasy</label>
-        <label><input type="checkbox" name="genre" value="Film-Noir"> Film-Noir</label>
-        <label><input type="checkbox" name="genre" value="History"> History</label>
-        <label><input type="checkbox" name="genre" value="Horror"> Horror</label>
-        <label><input type="checkbox" name="genre" value="Music"> Music</label>
-        <label><input type="checkbox" name="genre" value="Musical"> Musical</label>
-        <label><input type="checkbox" name="genre" value="Mystery"> Mystery</label>
-        <label><input type="checkbox" name="genre" value="Romance"> Romance</label>
-        <label><input type="checkbox" name="genre" value="Sci-Fi"> Sci-Fi</label>
-        <label><input type="checkbox" name="genre" value="Sport"> Sport</label>
-        <label><input type="checkbox" name="genre" value="Thriller"> Thriller</label>
-        <label><input type="checkbox" name="genre" value="War"> War</label>
-        <label><input type="checkbox" name="genre" value="Western"> Western</label>
-    </div>
-    <div class="other-filters">
-        <div>
-            <label for="rating">Minimum Rating:</label>
-            <input type="number" id="rating" name="rating" min="0" max="10" step="0.1">
-        </div>
-        <div>
-            <label for="min_duration">Min Duration (minutes):</label>
-            <input type="number" id="min_duration" name="min_duration">
-        </div>
-        <div>
-            <label for="max_duration">Max Duration (minutes):</label>
-            <input type="number" id="max_duration" name="max_duration">
-        </div>
-        <div>
-            <label for="min_year">Min Year:</label>
-            <input type="number" id="min_year" name="min_year">
-        </div>
-        <div>
-            <label for="max_year">Max Year:</label>
-            <input type="number" id="max_year" name="max_year">
-        </div>
-        <button type="submit">Apply Filters</button>
-    </div>
-</form>
-
-</div>
-
-
-
-        <div class="movie-container" id="movieContainer">
-            {% for movie in movies %}
-            <div class="movie-card" data-movie-id="{{ movie._id }}">
-                <img src="{{ movie.poster }}" alt="Poster of {{ movie.title }}">
-                <div class="movie-info">
-                    <h2>{{ movie.title }} (<span class="movie-year">{{ movie.year }}</span>)</h2>
-                    <p><strong>Genre:</strong> {{ movie.genre }}</p>
-                    <p><strong>Certificate:</strong> {{ movie.certificate }}</p>
-                    <p><strong>Duration:</strong> {{ movie.duration }} min</p>
-                    <p><strong>Rating:</strong> <span class="rating" data-rating="{{ movie.rating }}">{{ movie.rating }}</span></p>
-                </div>
+      <div id="filters" style="display: none">
+        <form id="filterForm">
+          <div class="genre-section">
+            <label for="genre">Genre:</label>
+            <label
+              ><input type="checkbox" name="genre" value="Action" />
+              Action</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Adventure" />
+              Adventure</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Animation" />
+              Animation</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Biography" />
+              Biography</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Comedy" />
+              Comedy</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Crime" /> Crime</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Documentary" />
+              Documentary</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Drama" /> Drama</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Family" />
+              Family</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Fantasy" />
+              Fantasy</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Film-Noir" />
+              Film-Noir</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="History" />
+              History</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Horror" />
+              Horror</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Music" /> Music</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Musical" />
+              Musical</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Mystery" />
+              Mystery</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Romance" />
+              Romance</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Sci-Fi" />
+              Sci-Fi</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Sport" /> Sport</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Thriller" />
+              Thriller</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="War" /> War</label
+            >
+            <label
+              ><input type="checkbox" name="genre" value="Western" />
+              Western</label
+            >
+          </div>
+          <div class="other-filters">
+            <div>
+              <label for="rating">Minimum Rating:</label>
+              <input
+                type="number"
+                id="rating"
+                name="rating"
+                min="0"
+                max="10"
+                step="0.1"
+              />
             </div>
-            {% endfor %}
+            <div>
+              <label for="min_duration">Min Duration (minutes):</label>
+              <input type="number" id="min_duration" name="min_duration" />
+            </div>
+            <div>
+              <label for="max_duration">Max Duration (minutes):</label>
+              <input type="number" id="max_duration" name="max_duration" />
+            </div>
+            <div>
+              <label for="min_year">Min Year:</label>
+              <input type="number" id="min_year" name="min_year" />
+            </div>
+            <div>
+              <label for="max_year">Max Year:</label>
+              <input type="number" id="max_year" name="max_year" />
+            </div>
+            <button type="submit">Apply Filters</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="movie-container" id="movieContainer">
+        {% for movie in movies %}
+        <div class="movie-card" data-movie-id="{{ movie._id }}">
+          <img src="{{ movie.poster }}" alt="Poster of {{ movie.title }}" />
+          <div class="movie-info">
+            <h2>
+              {{ movie.title }} (<span class="movie-year">{{ movie.year }}</span
+              >)
+            </h2>
+            <p><strong>Genre:</strong> {{ movie.genre }}</p>
+            <p><strong>Certificate:</strong> {{ movie.certificate }}</p>
+            <p><strong>Duration:</strong> {{ movie.duration }} min</p>
+            <p>
+              <strong>Rating:</strong>
+              <span class="rating" data-rating="{{ movie.rating }}"
+                >{{ movie.rating }}</span
+              >
+            </p>
+          </div>
         </div>
+        {% endfor %}
+      </div>
     </main>
-</body>
+  </body>
 </html>

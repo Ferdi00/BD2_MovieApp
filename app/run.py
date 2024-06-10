@@ -1,12 +1,12 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, session, redirect, url_for
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 import re, sys
 from datetime import datetime
 
 
-
 app = Flask(__name__)
+app.secret_key = "your_secret_key"
 
 # Imposta l'encoding a UTF-8 per la console
 sys.stdout.reconfigure(encoding="utf-8")
@@ -14,19 +14,20 @@ sys.stdout.reconfigure(encoding="utf-8")
 # Configurazione del client MongoDB
 client = MongoClient("mongodb://localhost:27017/")
 db = client["mydatabase"]
-collection = db["movies"]
-collection1 = db["users"]
+movie_collection = db["movies"]
+user_collection = db["users"]
 
 
 def get_unique_genres():
     pipeline = [{"$unwind": "$genre"}, {"$group": {"_id": "$genre"}}]
-    results = collection.aggregate(pipeline)
+    results = movie_collection.aggregate(pipeline)
 
     unique_genres = set()
     for result in results:
         genres = [genre.strip() for genre in result["_id"].split(",")]
         unique_genres.update(genres)
 
+homepage_movies = list(movie_collection.aggregate([{"$sample": {"size": 45}}]))
 
 # Endpoint per mostrare le collezioni nel database
 @app.route("/showcollections")
@@ -48,7 +49,7 @@ def search_movies():
     query = request.args.get("query", "")
     # Esegui la ricerca nel database utilizzando una regex per trovare tutte le occorrenze della sottostringa nel titolo
     movies = list(
-        collection.find(
+        movie_collection.find(
             {"title": {"$regex": f".*{re.escape(query)}.*", "$options": "i"}}
         )
     )
@@ -63,7 +64,7 @@ def search_movies():
 # ricerca film per id
 @app.route("/movie/<movie_id>")
 def movie_detail(movie_id):
-    movie = collection.find_one({"_id": ObjectId(movie_id)})
+    movie = movie_collection.find_one({"_id": ObjectId(movie_id)})
     return render_template("movie_detail.html", movie=movie)
 
 
@@ -98,7 +99,7 @@ def filter_movies():
         else:
             filter_criteria["year"] = {"$lte": int(max_year)}
 
-    movies = list(collection.find(filter_criteria))
+    movies = list(movie_collection.find(filter_criteria))
     for movie in movies:
         movie["_id"] = str(movie["_id"])
 
@@ -108,124 +109,45 @@ def filter_movies():
 # homepage
 @app.route("/")
 def homepage():
-    movies = list(collection.aggregate([{"$sample": {"size": 45}}]))
-    '''
-    # parte per inserire i dati di un utente
-    
-     # Esempio di dati da inserire
-    film_visti = [
-    {"nome": "Inception", "data_di_visione": datetime(2021, 5, 21)},
-    {"nome": "The Matrix", "data_di_visione": datetime(2021, 6, 10)},
-    {"nome": "Interstellar", "data_di_visione": datetime(2021, 7, 15)}
-    ]
+    user = session.get("user")
+    return render_template("index.html", movies=homepage_movies, user=user)
 
-    film_da_vedere = [
-    {"nome": "Inception"},
-    {"nome": "The Matrix"},
-    {"nome": "Interstellar"}
-    ]
-    collezione = db["users"]
-    collezione.insert_one({
-            "nome": 'pippo',
-            "cognome": 'franco',
-            "data_di_nascita": datetime(2021, 7, 15),
-            "username": 'franco',
-            "password": 'franco',
-            "film_visti": film_visti,
-            "film_da_vedere": film_da_vedere,
-        })
-    #fine inserimento 
-    
-    # parte per inserire i dati di un utente
-    
-     # Esempio di dati da inserire
-     
-    film_visti = [
-    {"nome": "My Spy", "data_di_visione": datetime(2021, 5, 21)},
-    {"nome": "The Incredibles", "data_di_visione": datetime(2021, 6, 10)},
-    ]
-
-    film_da_vedere = [
-    {"nome": "Foxcatcher"},
-    {"nome": "Sacrifice"},
-    ]
-    collezione = db["users"]
-    collezione.insert_one({
-            "nome": 'pippo',
-            "cognome": 'franco',
-            "data_di_nascita": datetime(2021, 7, 15),
-            "username": 'fra',
-            "password": 'franco',
-            "film_visti": film_visti,
-            "film_da_vedere": film_da_vedere,
-        })
-    #fine inserimento 
-    
-    for it in collezione.find():
-        print(it)
-    '''
-    return render_template("index.html", movies=movies)
-
-# login
+# login page
 @app.route("/login")
 def login():
-    movies = list(collection.aggregate([{"$sample": {"size": 45}}]))
-    return render_template("login.html", movies=movies)
+    return render_template("login.html")
 
-# Endpoint per verificare l'utente
+# POST login
 @app.route("/login", methods=["POST"])
 def login_user():
-     un = request.form['uname']
-     pas = request.form['psw']
-     documento= collection1.find_one({"username": un,"password":pas})
-     if documento: 
-         print('bravo_cesi')
-         preferiti=list()
-         vis=list()
-         for chiave,valore in documento.items():
-          if chiave == 'film_da_vedere':
-               for it in valore:
-                if it != 'NaN':
-                  print(it)
-                  tit=it.get('nome')
-                  print(tit)
-                  iter=collection.find_one({"title": tit})
-                  preferiti.append(iter)
-                  print(iter)
-          if chiave == 'film_visti':
-               for it in valore:
-                if it != 'NaN':
-                  print(it)
-                  tit=it.get('nome')
-                  print(tit)
-                  iter=collection.find_one({"title": tit})
-                  vis.append(iter)
-                  print(iter)
-         return render_template("preferiti.html", pref=preferiti, visti=vis)
-     else:
-          print('sgamato')
-          return render_template("login.html", errors="err")
+    username = request.form["uname"]
+    password = request.form["psw"]
+    user = user_collection.find_one({"username": username, "password": password})
+    if user:
+        user["_id"] = str(user["_id"])
+        session['user'] = user
+        return redirect(url_for("homepage"))
+    else:
+        return redirect(url_for('login'))
 
 # reg
-@app.route("/reg", methods=["GET"])
+@app.route("/signin", methods=["GET"])
 def reg():
-    movies = list(collection.aggregate([{"$sample": {"size": 45}}]))
-    return render_template("reg.html", movies=movies)
+    return render_template("signin.html")
 
 # Endpoint per registrare l'utente
 @app.route("/reg", methods=["POST"])
 def reg_user():
-     nm = request.form['name']
-     sr = request.form['surname']
-     br = request.form['birthday']
-     un = request.form['uname']
-     pas = request.form['psw']
-     documento= collection1.find_one({"username": un})
-     if documento: 
-        print('sgamato')
+    nm = request.form['name']
+    sr = request.form['surname']
+    br = request.form['birthday']
+    un = request.form['uname']
+    pas = request.form['psw']
+    documento= user_collection.find_one({"username": un})
+    if documento: 
         return render_template("reg.html", errors="usr")
-     else:
-            collection1.insert_one({
+    else:
+        user_collection.insert_one({
             "nome": nm,
             "cognome": sr,
             "data_di_nascita": br,
@@ -234,18 +156,96 @@ def reg_user():
             "film_visti": "NaN",
             "film_da_vedere": "NaN",
          })
-            print('cesi')
-     usrs=collection1.find()       
-     for el in usrs:
-         print(el)
-     movies = list(collection.aggregate([{"$sample": {"size": 45}}]))
-     return render_template("reg.html", movies=movies)
-     
-# homepage
-@app.route("/preferiti")
-def pref():
-    movies = list(collection.find([{"$sample": {"size": 45}}]))
-    return render_template("preferiti.html", movies=movies)
+        print('cesi')
+    usrs=user_collection.find()       
+    for el in usrs:
+        print(el)
+    movies = list(movie_collection.aggregate([{"$sample": {"size": 45}}]))
+    return render_template("reg.html", movies=movies)
+
+
+@app.route("/logout")
+def logout():
+    session.pop('user', None)
+    return redirect(url_for("homepage"))
+
+
+@app.route("/user")
+def printUser():
+    user = session.get("user")
+    print(user)
+    return jsonify(user)
+
+
+@app.route("/user_score/<movie_id>", methods=["POST"])
+def add_user_score(movie_id):
+    user = session.get("user")
+    if not user:
+        return jsonify({"error": "You need to log in first."}), 401
+
+    data = request.get_json()
+    score = data.get("score")
+    if not score:
+        return jsonify({"error": "Score is required"}), 400
+
+    user_collection.update_one(
+        {"_id": ObjectId(user["_id"])},
+        {"$set": {f"user_scores.{movie_id}": float(score)}}
+    )
+
+    updated_user = user_collection.find_one({"_id": ObjectId(user["_id"])})
+    updated_user["_id"] = str(updated_user["_id"])
+
+    session["user"] = updated_user
+    return jsonify({"redirect_url": url_for("homepage")})
+
+
+@app.route("/add_to_favorites/<movie_id>", methods=["POST"])
+def add_to_favorites(movie_id):
+    if "user" not in session:
+        return jsonify({"error": "Utente non autenticato"}), 401  # Unauthorized
+    user = session["user"]
+    user_data = user_collection.find_one({"_id": ObjectId(user["_id"])})
+    if movie_id in user_data.get("favourites", []):
+        user_collection.update_one(
+            {"_id": ObjectId(user["_id"])}, {"$pull": {"favourites": movie_id}}
+        )
+    else:
+        user_collection.update_one(
+            {"_id": ObjectId(user["_id"])}, {"$addToSet": {"favourites": movie_id}}
+        )
+
+    updated_user = user_collection.find_one({"_id": ObjectId(user["_id"])})
+    updated_user["_id"] = str(updated_user["_id"])
+
+    session["user"] = updated_user
+    return jsonify({"message": "Preferiti aggiornati con successo"}), 200  # OK
+
+
+@app.route("/add_to_watchlist/<movie_id>", methods=["POST"])
+def add_to_watchlist(movie_id):
+    if "user" not in session:
+        return jsonify({"error": "Utente non autenticato"}), 401  # Unauthorized
+    user = session["user"]
+    data = request.get_json()
+    date = data.get("date")
+    user_data = user_collection.find_one({"_id": ObjectId(user["_id"])})
+    if movie_id in user_data.get("watchlist", []):
+        user_collection.update_one(
+            {"_id": ObjectId(user["_id"])},
+            {"$pull": {"watchlist": {"movie_id": movie_id}}},
+        )
+    else:
+        user_collection.update_one(
+            {"_id": ObjectId(user["_id"])},
+            {"$addToSet": {"watchlist": {"movie_id": movie_id, "date": date}}},
+        )
+    updated_user = user_collection.find_one({"_id": ObjectId(user["_id"])})
+    updated_user["_id"] = str(updated_user["_id"])
+
+    session["user"] = updated_user
+    return jsonify({"message": "Watchlist aggiornata con successo"}), 200  # OK
+
 
 if __name__ == "__main__":
     app.run(debug=True)

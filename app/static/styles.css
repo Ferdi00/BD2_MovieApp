@@ -14,7 +14,7 @@ header {
     background-color: #1c1c1c;
     border-bottom: 2px solid #444;
     position: relative;
-    height: 60px; /* Altezza uniforme per l'header */
+    height: 60px;
 }
 
 header .left {
@@ -49,10 +49,12 @@ header .filter-toggle {
 header .filter-toggle:hover {
     background-color: #ff5a4d;
 }
-.intestazione{
+
+.intestazione {
     position: relative;
     text-align: center;
 }
+
 #searchForm {
     display: flex;
     align-items: center;
@@ -108,7 +110,7 @@ header .login-button:hover {
 }
 
 .filter-toggle {
-   margin-top: 10px;
+    margin-top: 10px;
     width: 80px;
     height: 40px;
     font-size: 1em;
@@ -151,7 +153,7 @@ header .login-button:hover {
 }
 
 #filterForm .genre-section label {
-    font-size: 1.4em; /* Aumenta la dimensione del font */
+    font-size: 1.4em;
     margin-right: 20px;
     display: flex;
     align-items: center;
@@ -159,7 +161,7 @@ header .login-button:hover {
 
 #filterForm .genre-section input[type="checkbox"] {
     margin-right: 10px;
-    transform: scale(1.3); /* Ingrandisce i checkbox */
+    transform: scale(1.3);
 }
 
 #filterForm .other-filters {
@@ -177,23 +179,23 @@ header .login-button:hover {
 }
 
 #filterForm .other-filters label {
-    font-size: 1.4em; /* Aumenta la dimensione del font */
+    font-size: 1.4em;
 }
 
 #filterForm .other-filters input[type="number"] {
     padding: 5px;
-    font-size: 1.2em; /* Aumenta la dimensione del font */
+    font-size: 1.2em;
     border: none;
     border-radius: 5px;
     background-color: #333;
     color: #fff;
-    width: 100px; /* Larghezza più piccola per gli input numerici */
+    width: 100px;
     text-align: center;
 }
 
 #filterForm button[type="submit"] {
     padding: 10px 20px;
-    font-size: 1.2em; /* Aumenta la dimensione del font */
+    font-size: 1.2em;
     border: none;
     border-radius: 5px;
     background-color: #ff6f61;
@@ -207,7 +209,6 @@ header .login-button:hover {
 #filterForm button[type="submit"]:hover {
     background-color: #ff5a4d;
 }
-
 
 .movie-container {
     display: flex;
@@ -252,7 +253,7 @@ header .login-button:hover {
 }
 
 .rating[data-rating] {
-    color: #fff; /* default color */
+    color: #fff;
 }
 
 .rating[data-rating="NaN"] {
@@ -300,3 +301,102 @@ header .login-button:hover {
 .rating[data-rating^="10"] {
     color: purple;
 }
+
+.movie-detail {
+    background-color: #1c1c1c;
+    color: #e0e0e0;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px auto;
+}
+
+.movie-detail img {
+    border-radius: 10px;
+    max-width: 100%;
+    width: 30%;
+    height: 30%;
+    margin-bottom: 20px;
+}
+
+.movie-detail .movie-info {
+    flex: 1;
+    padding-left: 20px;
+}
+
+.movie-detail h2 {
+    margin-top: 0;
+}
+
+@media (max-width: 768px) {
+    .movie-detail {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .movie-detail .movie-info {
+        padding-left: 0;
+    }
+}
+
+.user-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.action-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff6f61;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.action-button:hover {
+    background-color: #c33429;
+}
+
+.seen-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.seen-section label {
+    font-size: 1em;
+}
+
+.seen-section input[type="date"],
+.seen-section input[type="number"] {
+    padding: 5px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+}
+
+.user-score input[type="number"] {
+    width: 30px;
+    text-align: center;
+}
+
+.user-score {
+    background-color: #ff6f61;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
+    width: 170px;
+}
+

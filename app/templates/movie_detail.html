@@ -27,8 +27,21 @@
                 <p><strong>Description:</strong> {{ movie.description }}</p>
                 <p><strong>Review:</strong> {{ movie.review_title }}</p>
                 <p>{{ movie.review }}</p>
-            </div>
+                <div class="user-actions">
+    <button id="favorite-button" class="action-button">Aggiungi ai Preferiti</button>
+    <div class="seen-section">
+        <button id="seen-button" class="action-button">Aggiungi ai Già Visti</button>
+        <label for="seen-date">Data:</label>
+        <input type="date" id="seen-date" name="seen-date">
+    </div>
+    <div class="user-score">
+        <button id="score-button" class="action-button">Add Score</button>
+        <input type="number" id="user-score" name="user-score" min="0" max="10" step="0.1">
+    </div>
+</div>
+          
         </div>
+  
     </main>
 </body>
 </html>
