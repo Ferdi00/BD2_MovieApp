@@ -49,7 +49,10 @@ header .filter-toggle {
 header .filter-toggle:hover {
     background-color: #ff5a4d;
 }
-
+.intestazione{
+    position: relative;
+    text-align: center;
+}
 #searchForm {
     display: flex;
     align-items: center;
