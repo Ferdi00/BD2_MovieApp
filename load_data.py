@@ -55,13 +55,13 @@ def load_data(file_path):
 
         collezione_utenti.insert_one(
             {
-                "nome": "pippo",
-                "cognome": "franco",
-                "data_di_nascita": datetime(2021, 7, 15),
-                "username": "franco",
-                "password": "franco",
+                "name": "Ferdinando",
+                "surname": "Boccia",
+                "birthday": "2024-06-01",
+                "username": "Ferdi",
+                "password": "Ferdi",
                 "watchlist": [],
-                "favourites": [],
+                "favorites": [],
             }
         )
         logging.info("Dati utente inseriti nella collezione 'users'.")

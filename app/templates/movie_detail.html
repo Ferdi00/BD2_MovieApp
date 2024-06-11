@@ -6,10 +6,22 @@
     <title>{{ movie.title }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
 </head>
 <body>
     <header>
-        <h1>{{ movie.title }}</h1>
+      <div class="left">
+        <a href="/" class="home-icon"><i class="fas fa-home"></i></a>
+      </div>
+      <h1>{{ movie.title }}</h1>
+      {% if user %}
+      <a href="/logout" class="login-button">Logout</a>
+      {% else %}
+      <a href="/login" class="login-button">Login/Register</a>
+      {% endif %}
     </header>
     <main>
         <div class="movie-detail">
@@ -27,21 +39,45 @@
                 <p><strong>Description:</strong> {{ movie.description }}</p>
                 <p><strong>Review:</strong> {{ movie.review_title }}</p>
                 <p>{{ movie.review }}</p>
-                <div class="user-actions">
-    <button id="favorite-button" class="action-button">Aggiungi ai Preferiti</button>
-    <div class="seen-section">
-        <button id="seen-button" class="action-button">Aggiungi ai Già Visti</button>
-        <label for="seen-date">Data:</label>
-        <input type="date" id="seen-date" name="seen-date">
-    </div>
-    <div class="user-score">
-        <button id="score-button" class="action-button">Add Score</button>
-        <input type="number" id="user-score" name="user-score" min="0" max="10" step="0.1">
-    </div>
-</div>
-          
+               <div class="user-actions">
+                    {% if user %}
+                        {% if favorites %}
+                            <button id="favorite-button" class="action-button">Remove from Favorites</button>
+                        {% else %}
+                            <button id="favorite-button" class="action-button">Add to Favorites</button>
+                        {% endif %}
+                        
+                        {% if watchlist %}
+                            <div class="seen-section">
+                                <button id="seen-button" class="action-button">Remove from Watchlist</button>
+                                <label for="seen-date" class="hidden">Data:</label>
+                                <input type="date" id="seen-date" name="seen-date" value="2000-01-01" class="hidden">
+                            </div>
+                        {% else %}
+                            <div class="seen-section">
+                                <button id="seen-button" class="action-button">Add to Watchlist</button>
+                                <label for="seen-date">Data:</label>
+                                <input type="date" id="seen-date" name="seen-date">
+                            </div>
+                        {% endif %}
+                        
+                        <div class="user-score">
+                            {% if score %}
+                                <div class="user-score">
+                                    <button id="score-button" class="action-button">Modify Score</button>
+                                    <input type="number" id="user-score" name="user-score" min="0" max="10" step="0.1">
+                                    </div>
+                            {% else %}
+                                <div class="user-score">
+                                    <button id="score-button" class="action-button">Add Score</button>
+                                    <input type="number" id="user-score" name="user-score" min="0" max="10" step="0.1">
+                                    </div>
+                            {% endif %}
+                            
+                    {% endif %}
+                </div>
+            </div>  
         </div>
-  
     </main>
 </body>
 </html>

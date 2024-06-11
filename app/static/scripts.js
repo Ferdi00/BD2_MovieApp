@@ -127,6 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+
 document.addEventListener("DOMContentLoaded", function () {
   var movieYears = document.querySelectorAll(".movie-year");
   movieYears.forEach(function (yearElem) {
@@ -139,88 +140,96 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  const scoreButton = document.getElementById("score-button");
-  const scoreInput = document.getElementById("user-score");
-  const dateInput = document.getElementById("seen-date");
-   const date = dateInput.value;
-  const favoritesButton = document.getElementById("favorite-button");
-  const watchlistButton = document.getElementById("seen-button");
-  const movieId = window.location.pathname.split("/").pop(); // Assumendo che l'ID del film sia l'ultima parte dell'URL
+  // Add event listener to the Add Score button
+  document
+    .getElementById("score-button")
+    .addEventListener("click", function () {
+      const movieId = window.location.pathname.split("/").pop(); // Assuming the movie ID is in the URL
+      const score = document.getElementById("user-score").value;
 
-  // Evento per gestire l'aggiunta/rimozione dai preferiti
-  favoritesButton.addEventListener("click", function () {
-    toggleFavorites(movieId);
-  });
+      if (!score) {
+        alert("Please enter a score.");
+        return;
+      }
 
-  // Evento per gestire l'aggiunta/rimozione dalla watchlist
-  watchlistButton.addEventListener("click", function () {
-    toggleWatchlist(movieId);
-  });
+      fetch(`/user_score/${movieId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ score: score }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.error) {
+            alert(data.error);
+          } else {
+            alert(data.message);
+            window.location.reload();
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("An error occurred while adding the score.");
+        });
+    });
 
-  scoreButton.addEventListener("click", function () {
-    const score = scoreInput.value;
+  // Add event listener to the Add to Favorites button
+  document
+    .getElementById("favorite-button")
+    .addEventListener("click", function () {
+      const movieId = window.location.pathname.split("/").pop(); // Assuming the movie ID is in the URL
 
-    fetch(`/user_score/${movieId}`, {
+      fetch(`/add_to_favorites/${movieId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.error) {
+            alert(data.error);
+          } else {
+            alert(data.message);
+            window.location.reload();
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("An error occurred while adding the movie to favorites.");
+        });
+    });
+
+  // Add event listener to the Seen button
+  document.getElementById("seen-button").addEventListener("click", function () {
+    const movieId = window.location.pathname.split("/").pop(); // Assuming the movie ID is in the URL
+    const seenDate = document.getElementById("seen-date").value;
+
+    if (!seenDate) {
+      alert("Please select a date.");
+      return;
+    }
+
+    fetch(`/add_to_watchlist/${movieId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ score: score }),
+      body: JSON.stringify({ seenDate: seenDate }),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
           alert(data.error);
         } else {
-          window.location.href = data.redirect_url; // Reindirizza alla homepage o a un'altra pagina
+          alert(data.message);
+          window.location.reload();
         }
       })
       .catch((error) => {
         console.error("Error:", error);
+        alert("An error occurred while marking the movie as seen.");
       });
   });
-
-  // Funzione per gestire l'aggiunta/rimozione dai preferiti
-  function toggleFavorites(movieId) {
-    fetch(`/add_to_favorites/${movieId}`, {
-      method: "POST",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Errore durante l'aggiornamento dei preferiti");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data.message); // Logga il messaggio di successo
-        // Aggiorna l'interfaccia utente o fai altre azioni necessarie
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }
-
-  // Funzione per gestire l'aggiunta/rimozione dalla watchlist
-  function toggleWatchlist(movieId) {
-    fetch(`/add_to_watchlist/${movieId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ date: date }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Errore durante l'aggiornamento della watchlist");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data.message); // Logga il messaggio di successo
-        // Aggiorna l'interfaccia utente o fai altre azioni necessarie
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }
 });

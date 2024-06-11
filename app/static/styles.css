@@ -388,6 +388,7 @@ header .login-button:hover {
 .user-score input[type="number"] {
     width: 30px;
     text-align: center;
+    margin-right: 5px;
 }
 
 .user-score {
@@ -397,6 +398,9 @@ header .login-button:hover {
     align-items: center;
     gap: 10px;
     height: 40px;
-    width: 170px;
+    width: auto
 }
 
+.hidden {
+  display: none;
+}
