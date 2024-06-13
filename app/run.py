@@ -277,6 +277,40 @@ def add_to_watchlist(movie_id):
     session["user"] = updated_user
     return jsonify({"message": message}), 200  # OK
 
+@app.route("/personal_area")
+def personal_area():
+    user = session.get("user")
+    if not user:
+        return redirect(url_for("login"))
+    
+    #if there are favorites in the user I extract them from the film collection
+    if user.get("favorites"):
+      favorites = []
+      for film_id in user.get("favorites"):
+         film = movie_collection.find_one({"_id": ObjectId(film_id)})
+         film["_id"] = str(film["_id"])
+         favorites.append(movie_collection.find_one({"_id": ObjectId(film_id)}))
+         print(favorites)
+    else:
+        favorites="NaN"
+
+    #if there are watchlistfilm in the user I extract them from the film collection
+    if user.get("watchlist"):
+      watchlist = []
+      for film_id in user.get("watchlist"):
+         film = movie_collection.find_one({"_id": ObjectId(film_id)})
+         film["_id"] = str(film["_id"])
+         watchlist.append(movie_collection.find_one({"_id": ObjectId(film_id)}))
+         print(watchlist)
+    else:
+        watchlist="NaN"
+
+    return render_template(
+        "personal_area.html",
+        favorites=favorites,
+        watchlist=watchlist,
+        user=user,
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

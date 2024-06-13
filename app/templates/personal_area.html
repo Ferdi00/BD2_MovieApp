@@ -6,7 +6,7 @@
     <title>Film Collection</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='styles.css') }}"
+      href="{{ url_for('static', filename='personal_area.css') }}"
     />
     <script src="{{ url_for('static', filename='scripts.js') }}" defer></script>
     <!-- Aggiungi Font Awesome -->
@@ -27,7 +27,6 @@
         <button type="submit">Cerca</button>
       </form>
       {% if user %} Benvenuto {{ user.name }}
-      <a href="/personal_area" class="login-button">Personal area</a>
       <a href="/logout" class="login-button">Logout</a>
       {% else %}
       <a href="/login" class="login-button">Login/Register</a>
@@ -155,8 +154,18 @@
         </form>
       </div>
 
+      <div class="container">
+          <p class="puser"><strong>Name:</strong> {{ user.name }}</p><br>
+          <p class="puser"><strong>Surname:</strong> {{ user.surname }}</p><br>
+          <p class="puser"><strong>Date of birth:</strong> {{ user.birthday }} </p><br>
+          <p class="puser"><strong>Username:</strong> {{ user.username }} </p><br>
+          <p class="puser"><strong>Password:</strong> {{ user.password }} </p><br>
+      </div>
+
       <div class="movie-container" id="movieContainer">
-        {% for movie in movies %}
+      {% if favorites != "NaN" %}
+      <h1> Favorites </h1><br>
+        {% for movie in favorites %}
         <div class="movie-card" data-movie-id="{{ movie._id }}">
           <img src="{{ movie.poster }}" alt="Poster of {{ movie.title }}" />
           <div class="movie-info">
@@ -176,6 +185,32 @@
           </div>
         </div>
         {% endfor %}
+      {% endif %}
+      </div>
+      <div class="movie-container" id="movieContainer">
+      {% if watchlist != "NaN" %}
+      <h1> Watchlist </h1><br>
+        {% for movie in watchlist %}
+        <div class="movie-card" data-movie-id="{{ movie._id }}">
+          <img src="{{ movie.poster }}" alt="Poster of {{ movie.title }}" />
+          <div class="movie-info">
+            <h2>
+              {{ movie.title }} (<span class="movie-year">{{ movie.year }}</span
+              >)
+            </h2>
+            <p><strong>Genre:</strong> {{ movie.genre }}</p>
+            <p><strong>Certificate:</strong> {{ movie.certificate }}</p>
+            <p><strong>Duration:</strong> {{ movie.duration }} min</p>
+            <p>
+              <strong>Rating:</strong>
+              <span class="rating" data-rating="{{ movie.rating }}"
+                >{{ movie.rating }}</span
+              >
+            </p>
+          </div>
+        </div>
+        {% endfor %}
+      {% endif %}
       </div>
     </main>
   </body>
