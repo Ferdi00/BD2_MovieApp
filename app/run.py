@@ -63,21 +63,24 @@ def search_movies():
 
 @app.route("/movie/<movie_id>")
 def movie_detail(movie_id):
-    user = session.get("user")
-    if not user:
-        return redirect(url_for("login"))
 
+    user = session.get("user")
     movie = movie_collection.find_one({"_id": ObjectId(movie_id)})
     if not movie:
-        return "Movie not found", 404
+                return "Movie not found", 404
+    if user:
+        user_data = user_collection.find_one({"_id": ObjectId(user["_id"])})
+        favorites = movie_id in user_data.get("favorites", [])
+        watchlist = any(
+            item["movie_id"] == movie_id for item in user_data.get("watchlist", [])
+        )
+        score = user_data.get("user_scores", {}).get(movie_id)
+    else:
+        favorites = []
+        watchlist = []
+        score = ""
 
-    user_data = user_collection.find_one({"_id": ObjectId(user["_id"])})
-    favorites = movie_id in user_data.get("favorites", [])
-    watchlist = any(
-        item["movie_id"] == movie_id for item in user_data.get("watchlist", [])
-    )
-    score = user_data.get("user_scores", {}).get(movie_id)
-
+    
     return render_template(
         "movie_detail.html",
         movie=movie,
@@ -131,6 +134,39 @@ def filter_movies():
 def homepage():
     user = session.get("user")
     return render_template("index.html", movies=homepage_movies, user=user)
+
+
+@app.route("/favorites")
+def favorites():
+    user = session.get("user")
+
+    favorites = [] 
+    if user.get("favorites"):
+        for film_id in user.get("favorites")[-8:]:  # Limita agli ultimi 8 film
+            film = movie_collection.find_one({"_id": ObjectId(film_id)})
+            if film:
+                film["_id"] = str(film["_id"])
+                favorites.append(film)
+
+    return render_template("favorites.html", movies=favorites, user=user)
+
+
+@app.route("/watchlist")
+def watchlist():
+    user = session.get("user")
+    watchlist = []
+    if user.get("watchlist"):
+        for item in user.get("watchlist"):  
+            if isinstance(item, dict) and "movie_id" in item:
+                film_id = item["movie_id"]
+                film = movie_collection.find_one({"_id": ObjectId(film_id)})
+                if film:
+                    film["_id"] = str(film["_id"])
+                    film["added_date"] = item.get("date")
+                    watchlist.append(film)
+
+    return render_template("watchlist.html", movies=watchlist, user=user)
+
 
 # login page
 @app.route("/login")
@@ -270,40 +306,41 @@ def add_to_watchlist(movie_id):
             {"$addToSet": {"watchlist": {"movie_id": movie_id, "date": date}}},
         )
         message = "Movie added to watchlist successfully"
-   
+
     updated_user = user_collection.find_one({"_id": ObjectId(user["_id"])})
     updated_user["_id"] = str(updated_user["_id"])
 
     session["user"] = updated_user
     return jsonify({"message": message}), 200  # OK
 
+
 @app.route("/personal_area")
 def personal_area():
     user = session.get("user")
     if not user:
         return redirect(url_for("login"))
-    
-    #if there are favorites in the user I extract them from the film collection
-    if user.get("favorites"):
-      favorites = []
-      for film_id in user.get("favorites"):
-         film = movie_collection.find_one({"_id": ObjectId(film_id)})
-         film["_id"] = str(film["_id"])
-         favorites.append(movie_collection.find_one({"_id": ObjectId(film_id)}))
-         print(favorites)
-    else:
-        favorites="NaN"
 
-    #if there are watchlistfilm in the user I extract them from the film collection
+    favorites = []
+    watchlist = []
+
+    # Se ci sono film nei preferiti dell'utente, li estraggo dalla collezione movie
+    if user.get("favorites"):
+        for film_id in user.get("favorites")[-8:]:  # Limita agli ultimi 8 film
+            film = movie_collection.find_one({"_id": ObjectId(film_id)})
+            if film:
+                film["_id"] = str(film["_id"])
+                favorites.append(film)
+
+    # Se ci sono film nella watchlist dell'utente, li estraggo dalla collezione movie
     if user.get("watchlist"):
-      watchlist = []
-      for film_id in user.get("watchlist"):
-         film = movie_collection.find_one({"_id": ObjectId(film_id)})
-         film["_id"] = str(film["_id"])
-         watchlist.append(movie_collection.find_one({"_id": ObjectId(film_id)}))
-         print(watchlist)
-    else:
-        watchlist="NaN"
+        for item in user.get("watchlist")[-8:]:  # Limita agli ultimi 8 film
+            if isinstance(item, dict) and "movie_id" in item:
+                film_id = item["movie_id"]
+                film = movie_collection.find_one({"_id": ObjectId(film_id)})
+                if film:
+                    film["_id"] = str(film["_id"])
+                    film["added_date"] = item.get("date")
+                    watchlist.append(film)
 
     return render_template(
         "personal_area.html",
@@ -311,6 +348,7 @@ def personal_area():
         watchlist=watchlist,
         user=user,
     )
+
 
 if __name__ == "__main__":
     app.run(debug=True)

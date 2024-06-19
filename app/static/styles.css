@@ -55,7 +55,8 @@ header .filter-toggle:hover {
     text-align: center;
 }
 
-#searchForm {
+#searchForm,
+#searchFormList {
     display: flex;
     align-items: center;
     flex: 1;
@@ -74,7 +75,8 @@ header .filter-toggle:hover {
     color: #fff;
 }
 
-#searchForm button {
+#searchForm button,
+#searchFormList button {
     padding: 10px 20px;
     font-size: 1em;
     border: none;
@@ -226,6 +228,21 @@ header .login-button:hover {
     width: 160px;
     cursor: pointer;
     transition: transform 0.2s;
+}
+
+.movie-card_w {
+    margin: 20px;
+    width: 160px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    cursor: pointer;
+    height: 480px; /* Set a fixed height for consistency */
 }
 
 .movie-card:hover {
@@ -386,7 +403,7 @@ header .login-button:hover {
 }
 
 .user-score input[type="number"] {
-    width: 30px;
+    width: 45px;
     text-align: center;
     margin-right: 5px;
 }
@@ -403,4 +420,18 @@ header .login-button:hover {
 
 .hidden {
   display: none;
+}
+
+.data-list {
+    width: 140px;;
+    font-weight: bold;
+    font-size: 1em;
+    padding: 10px;
+    color: #f7f1f1;
+    background-color:#cb534b ;
+    border-top: 1px solid #444;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    text-align: center;
 }
